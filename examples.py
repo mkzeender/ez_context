@@ -1,38 +1,43 @@
-from random import random
+import random
 from ez_context import context_mgr
 from typing import assert_type
 
 
 @context_mgr
-def foo(bar: int = 10):
-    print(f"entering {bar}")
-
-    error = yield bar + 2
-
-    print(f"exiting {bar}, {error=}")
+def example():
+    print("entering")
+    yield
+    print("exiting")
 
 
-with foo(10) as bar:
-    assert_type(bar, int)
-    assert bar == 12
+with example:
+    print("Hello")
 
 
 @context_mgr
-def random_value():
-    rand_num = random()
+def random_value(a=0, b=100):
+    rand_num: int = random.randint(a, b)
     print(f"entering {rand_num}")
 
+    # `yield` runs the body of the `with` statement.
+    # The yielded value is stored in VAR by `with ... as VAR`
     error = yield rand_num
+    # If the body raises an Exception, it's returned here.
+    # Otherwise, None is returned
 
     print(f"exiting {rand_num}, {error=}")
     if isinstance(error, ValueError):
-        return True  # suppress the error
+        # Return True to suppress the Exception
+        return True
 
 
-# Parentheses are optional!
-with random_value as r1:
-    assert_type(r1, float)
+with random_value(-5, -1) as n:
+    assert_type(n, int)  # statically typed!
+    print(n)
 
-    # reusable and reentrant
-    with random_value:
+# Parentheses are optional if there are no arguments.
+with random_value as n1:
+
+    # Reusable and re-entrant
+    with random_value as n2:
         raise ValueError("CoolBeans")

@@ -43,7 +43,7 @@ class ContextMgrAutoCallable[**P, YieldT](ContextMgrFactory[[], YieldT]):
 
         return mgr.__exit__(exc_tp, exc, exc_tb)
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> ContextMgr[YieldT]:
         return super().__call__(*args, **kwargs)
 
 
