@@ -3,6 +3,11 @@
 Allows you to create generator-based context managers without try/finally.
 Fully static-typed and thread-safe.
 
+Installing
+```
+pip install ez_context
+```
+
 Example:
 ```python
 @context_mgr
@@ -21,7 +26,7 @@ Hello World!
 exiting
 ```
 
-## Detailed Example:
+Detailed Example:
 
 ```python
 @context_mgr
