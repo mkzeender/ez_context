@@ -4,7 +4,7 @@ from typing import assert_type
 
 
 @context_mgr
-def foo(bar: int):
+def foo(bar: int = 10):
     print(f"entering {bar}")
 
     error = yield bar + 2

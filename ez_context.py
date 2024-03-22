@@ -27,7 +27,7 @@ class ContextMgrFactory[**ArgT, YieldT]:
         return ContextMgr(self.genfunc(*args, **kwargs))
 
 
-class ContextMgrAutoCallable[YieldT](ContextMgrFactory[[], YieldT]):
+class ContextMgrAutoCallable[**P, YieldT](ContextMgrFactory[[], YieldT]):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -42,6 +42,9 @@ class ContextMgrAutoCallable[YieldT](ContextMgrFactory[[], YieldT]):
         mgr = ctx.stack.pop()
 
         return mgr.__exit__(exc_tp, exc, exc_tb)
+
+    def __call__(self, *args: P.args, **kwargs: P.kwargs):
+        return super().__call__(*args, **kwargs)
 
 
 class ContextMgr[YieldT]:
@@ -62,8 +65,8 @@ class ContextMgr[YieldT]:
 
 @overload
 def context_mgr[
-    YieldT
-](func: Callable[[], GenType[YieldT]]) -> ContextMgrAutoCallable[YieldT]: ...
+    **P, YieldT
+](func: Callable[[], GenType[YieldT]]) -> ContextMgrAutoCallable[P, YieldT]: ...
 
 
 @overload
